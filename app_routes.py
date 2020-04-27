@@ -35,13 +35,22 @@ def new():
 
 @app.route('/edit')
 def edit():
+    """
+    Two methods - get and post
+    Receive ship name as get parameter and fill form like new
+    Post method - reads form data and updates value in db
+    :return:
+    """
     return 'Edit action'
 
 
 @app.route('/delete')
-def delete(name=None):
-    get_db().del_ship(ship_name=name)
-    return redirect('/')
+def delete():
+    """
+    Receive ship name as get parameter and remove it from db
+    :return:
+    """
+    return 'Delete action'
 
 
 @app.teardown_appcontext

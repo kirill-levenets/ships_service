@@ -25,7 +25,8 @@ class Db:
 
     @classmethod
     def del_ship(cls, ship_name):
-        cls.ships.pop(ship_name)
+        if ship_name in cls.ships:
+            cls.ships.pop(ship_name)
 
     def close(self):
         pass
