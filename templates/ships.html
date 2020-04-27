@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang = "en">
+   <head>
+      <style>
+      table, th, td {
+        border: 1px solid black;
+      }
+      </style>
+   </head>
+   <body>
+      <h3>
+         <a href = "{{ url_for('show_all') }}">Ships - Flask SQLAlchemy example</a>
+      </h3>
+
+      <hr/>
+      {%- for message in get_flashed_messages() %}
+         {{ message }}
+      {%- endfor %}
+
+      <h3>Ship (<a href = "{{ url_for('new') }}">Add Ship
+         </a>)</h3>
+
+      <table >
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>Country</th>
+               <th>Year</th>
+               <th>Size</th>
+               <th>Type</th>
+               <th>Action</th>
+            </tr>
+         </thead>
+
+         <tbody>
+            {% for ship in ships %}
+               <tr>
+                  <td>{{ ship.name }}</td>
+                  <td>{{ ship.country_name }}</td>
+                  <td>{{ ship.built_year }}</td>
+                  <td>{{ ship.length ~ ' x ' ~ ship.width }}</td>
+                  <td>{{ ship.ship_description }}</td>
+                  <td>
+                     <a href="{{ url_for('edit', name=ship.name) }}">
+                        edit
+                     </a> |
+                     <a href="{{ url_for('delete', name=ship.name) }}">
+                        delete
+                     </a>
+                  </td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+   </body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+   <body>
+      <h3>Ships - Flask SQLAlchemy example</h3>
+      <hr/>
+
+      {%- for category, message in get_flashed_messages(with_categories = true) %}
+         <div class = "alert alert-danger">
+            {{ message }}
+         </div>
+      {%- endfor %}
+
+      <form action = "{{ request.path }}" method = "post">
+         <label for = "name">Name</label><br>
+         <input type = "text" name = "name" placeholder = "Name" /><br>
+
+         <label for = "country">Country</label><br>
+         <input type = "text" name = "country" placeholder = "country holder" /><br>
+
+         <label for = "ship_description">Description of ship</label><br>
+         <textarea name = "ship_description" placeholder = "Description of ship"></textarea><br>
+
+         <label for = "built_year">Year</label><br>
+         <input type = "text" name = "built_year" placeholder = "2000" /><br>
+
+         <input type = "submit" value = "Submit" />
+      </form>
+   </body>
+</html>
+
+{
+   "name": "содержимое поля input",
+   "country": "...",
+   "ship_description": "...",
+   "built_year": "..."
+}
