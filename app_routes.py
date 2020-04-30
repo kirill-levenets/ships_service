@@ -3,7 +3,7 @@ from flask import current_app as app
 from flask import (
     request, flash, url_for, redirect, g, render_template)
 
-from db_mock import get_db
+from db_pg import get_db
 from ship import Ship
 
 
@@ -41,6 +41,7 @@ def edit():
     Post method - reads form data and updates value in db
     :return:
     """
+    # TODO: implement edit ship
     return 'Edit action'
 
 
@@ -50,6 +51,7 @@ def delete():
     Receive ship name as get parameter and remove it from db
     :return:
     """
+    # TODO: implement delete ship
     return 'Delete action'
 
 
