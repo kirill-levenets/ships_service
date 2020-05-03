@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-   <title>New ship</title>
+   <title>Edit ship</title>
    <body>
       <h3>
          <a href = "{{ url_for('show_all') }}">Ships - Flask SQLAlchemy example</a>
@@ -13,24 +13,31 @@
          </div>
       {%- endfor %}
 
-      <form action = "{{ request.path }}" method = "post">
+      <form action = "{{ url_for('edit') }}" method = "post">
+         <input type="hidden" name="ship_id" value="{{ ship.id }}">
+
          <label for = "name">Name</label><br>
-         <input type = "text" name = "name" placeholder = "Name" /><br>
+         <input type = "text" name = "name" placeholder = "Name"
+                value="{{ ship.name }}" /><br>
 
          <label for = "country">Country</label><br>
-<!--         <input type = "text" name = "country" placeholder = "country holder" /><br>-->
-
          <select name="country">
             {%- for country in countries %}
-               <option value="{{ country }}">{{ country }}</option>
+               <option value="{{ country }}"
+                       {{ 'selected' if country == ship.country_name else '' }}
+                  >{{ country }}
+               </option><br>
             {%- endfor %}
-         </select><br>
+         </select>
 
          <label for = "ship_description">Description of ship</label><br>
-         <textarea name = "ship_description" placeholder = "Description of ship"></textarea><br>
+         <textarea name = "ship_description"
+                   placeholder = "Description of ship"
+         >{{ ship.description }}</textarea><br>
 
          <label for = "built_year">Year</label><br>
-         <input type = "text" name = "built_year" placeholder = "2000" /><br>
+         <input type = "text" name = "built_year" placeholder = "2000"
+                value="{{ ship.built_year }}"/><br>
 
          <input type = "submit" value = "Submit" />
       </form>

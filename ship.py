@@ -25,8 +25,8 @@ class Ship:
         return f'{self.name} [{self.country_name} - {self.built_year}]'
 
     def make_dict(self):
-        # TODO: prepare dict from this object
-        pass
+        d = {k: getattr(self, k) for k in self.__slots__}
+        return d
 
 
 if __name__ == '__main__':

@@ -23,36 +23,51 @@ def new():
             flash('Please enter all the fields', 'error')
         else:
             ship = Ship(
-                request.form['name'], request.form['country'],
+                None, request.form['name'], request.form['country'],
                 request.form['ship_description'], request.form['built_year']
             )
 
-            get_db().upsert_ship(ship)
-            flash('Record was successfully added')
+            message = get_db().insert_ship(ship)
+            flash(message)
             return redirect(url_for('show_all'))
-    return render_template('new.html')
+    countries = get_db().get_countries()
+    return render_template('new.html', countries=countries)
 
 
-@app.route('/edit')
+@app.route('/edit', methods=["GET", "POST"])
 def edit():
-    """
-    Two methods - get and post
-    Receive ship name as get parameter and fill form like new
-    Post method - reads form data and updates value in db
-    :return:
-    """
-    # TODO: implement edit ship
-    return 'Edit action'
+    ship = None
+    if request.method == 'POST':
+        if (not request.form['name'] or
+                not request.form['country'] or
+                not request.form['ship_description']):
+            flash('Please enter all the fields', 'error')
+        else:
+            ship = Ship(
+                request.form['ship_id'], request.form['name'], request.form['country'],
+                request.form['ship_description'], request.form['built_year']
+            )
+            message = get_db().update_ship(ship)
+            flash(message)
+            return redirect(url_for('show_all'))
+    else:
+        ship_name = request.args.get('name')
+        if ship_name:
+            ship = get_db().get_ship_by_name(ship_name)
+    countries = get_db().get_countries()
+    return render_template('edit.html', ship=ship, countries=countries)
 
 
-@app.route('/delete')
+@app.route('/delete', methods=["GET"])
 def delete():
     """
     Receive ship name as get parameter and remove it from db
     :return:
     """
-    # TODO: implement delete ship
-    return 'Delete action'
+    ship_name = request.args.get('name')
+    get_db().del_ship(ship_name)
+
+    return redirect(url_for('show_all'))
 
 
 @app.teardown_appcontext
