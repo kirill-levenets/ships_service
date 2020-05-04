@@ -3,8 +3,8 @@ from flask import current_app as app
 from flask import (
     request, flash, url_for, redirect, g, render_template)
 
-from db_pg import get_db
-from ship import Ship
+from libs.db_pg import get_db
+from libs.ship import Ship
 
 
 @app.route('/')

@@ -3,7 +3,7 @@ from flask import g, current_app
 import psycopg2
 
 from settings import DB_URL
-from ship import Ship
+from libs.ship import Ship
 
 
 def get_db():
@@ -95,7 +95,6 @@ class DbPg:
         self.con.commit()
 
     def get_countries(self):
-        # TODO: implement
         query = f"SELECT name FROM countries"
         self.cur.execute(query)
         for params in self.cur:

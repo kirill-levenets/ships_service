@@ -9,6 +9,10 @@ sudo docker run --name some-postgres -e POSTGRES_PASSWORD=123456 -d -p 54320:543
 sudo docker stop some-postgres
 sudo docker start some-postgres
 
+
+upsert example:
+https://www.postgresqltutorial.com/postgresql-upsert/
+
 ...
 
 sudo docker run -d --hostname my-rabbit --name some-rabbit -p 56720:5672 -p 8080:15672 rabbitmq:3-management
@@ -96,7 +100,8 @@ for i in range(50):
 cur.execute('''
     SELECT ships.*, countries.name 
     FROM ships inner join countries on ships.country_id = countries.id
-    WHERE ships.name LIKE %(pattern)s''',
+    WHERE ships.name LIKE %(pattern)s
+    LIMIT 1000''',
     {'pattern': '%' + '9' + '%'}
 )
 
@@ -111,8 +116,6 @@ for v in cur:
 #     '\n'.join([str(r) for r in result])
 # )
 
-# Make the changes to the database persistent
-con.commit()
 
 
 # Close communication with the database
@@ -120,3 +123,4 @@ cur.close()
 con.close()
 
 # TODO: create rabbit queues before start
+
