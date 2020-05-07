@@ -8,7 +8,7 @@ from libs.ship import Ship
 
 def get_db():
     if 'db' not in g:
-        g.db = DbPg()
+        g.db = DbPg(current_app.logger)
     return g.db
 
 
@@ -18,11 +18,12 @@ FIELDS = 'ships.id as sid, ships.name as name, countries.name as country_name, '
 
 
 class DbPg:
-    def __init__(self, db_url=DB_URL):
+    def __init__(self, logger, db_url=DB_URL):
         """
         create db connection and cursor
         :param db_url:
         """
+        self.log = logger
         self.con = psycopg2.connect(db_url)
         self.cur = self.con.cursor()
 
@@ -41,7 +42,7 @@ class DbPg:
                 f"WHERE ships.name = %s"
         self.cur.execute(query, (ship_name,))
         params = self.cur.fetchone()
-        current_app.logger.info(f'get_ship_by_name [{ship_name}]: {params}')
+        self.log.info(f'get_ship_by_name [{ship_name}]: {params}')
         return Ship(*params)
 
     def update_ship(self, ship):
@@ -61,7 +62,7 @@ class DbPg:
             self.con.commit()
         except Exception as e0:
             ret_message = f'Error on update: {e0}'
-            current_app.logger.error(ret_message)
+            self.log.error(ret_message)
         return ret_message
 
     def insert_ship(self, ship):
@@ -78,7 +79,7 @@ class DbPg:
             self.con.commit()
         except Exception as e0:
             ret_message = f'Error on insert: {e0}'
-            current_app.logger.error(ret_message)
+            self.log.error(ret_message)
         return ret_message
 
 
@@ -99,6 +100,15 @@ class DbPg:
         self.cur.execute(query)
         for params in self.cur:
             yield params[0]
+
+    def exec_query(self, query, *args):
+        self.cur.execute(query, args)
+        self.con.commit()
+
+    def get_query(self, query, *args):
+        self.cur.execute(query, args)
+        for row in self.cur:
+            yield row
 
     def close(self):
         self.cur.close()
