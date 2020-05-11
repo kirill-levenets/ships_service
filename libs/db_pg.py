@@ -80,6 +80,7 @@ class DbPg:
         except Exception as e0:
             ret_message = f'Error on insert: {e0}'
             self.log.error(ret_message)
+            self.con.rollback()
         return ret_message
 
 

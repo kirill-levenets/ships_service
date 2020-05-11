@@ -63,6 +63,12 @@ query = f'''INSERT INTO countries (id, name, population, area, density)
 cur.execute(query, data)
 con.commit()
 
+
+## !!!!
+alter_serial = f"ALTER SEQUENCE countries_id_seq RESTART WITH {rows_count}"
+cur.execute(alter_serial)
+con.commit()
+
 ############# create ships table ####################
 
 cur.execute("DROP TABLE IF EXISTS ships")

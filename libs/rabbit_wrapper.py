@@ -2,7 +2,7 @@
 import rabbitpy
 
 
-RABITMQ_URL = "amqp://guest:guest@localhost:5672/%2F"
+from settings import RABITMQ_URL
 
 
 class RabbitQueue:
@@ -35,8 +35,12 @@ class RabbitQueue:
                 msg.ack()
                 break
             yield data
-            msg.ack()
-            # msg.nack(requeue=True)
+            # msg.ack()
+
+    def get_generator(self, exit_event):
+        while not exit_event.is_set():
+            msg = self.queue.get(acknowledge=True)
+            yield msg
 
     def count(self):
         return len(self.queue)
@@ -46,14 +50,22 @@ class RabbitQueue:
         self.connection.close()
 
 
-rq = RabbitQueue('test-exchange', 'test-queue')
+if __name__ == '__main__':
+    rq = RabbitQueue('test-exchange', 'test-queue')
 
-for i in range(100_000):
-    rq.publish({'url': 'htpp://.......'})
+    if rq.count() == 0:
+        for i in range(100):
+            rq.publish({'url': f'http://{i}'})
 
-rq.publish({})
+        rq.publish({})
 
-for msg in rq.consume_generator():
-    print(msg)
+    from threading import Event
+    ex_ev = Event()
 
-rq.close()
+    for raw_msg in rq.get_generator(ex_ev):
+        if not raw_msg:
+            break
+        print(raw_msg.json())
+        raw_msg.nack(requeue=False)
+
+    rq.close()
