@@ -39,7 +39,8 @@ class ShipsGenerator:
             if self.was_pages.get(i):
                 continue
 
-            msg = {'url': PAGE_URL.format(num=i)}
+            msg = {'url': PAGE_URL.format(num=i),
+                   'num': i}
 
             self.log.debug(f'[{i}]: queue size is: {self.rqueue.count()}')
             while self.rqueue.count() > MAX_QUEUE_SIZE:

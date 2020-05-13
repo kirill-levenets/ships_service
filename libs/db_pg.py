@@ -73,6 +73,7 @@ class DbPg:
                 %(name)s,
                 (SELECT id from countries WHERE name=%(country_name)s), 
                 %(description)s, %(built_year)s)
+            ON CONFLICT (name) DO NOTHING
         """
         try:
             self.cur.execute(query, ship.make_dict())
