@@ -6,7 +6,7 @@ dotenv.load_dotenv()
 
 # flask app
 RANDOM_STRING = os.getenv("RANDOM_STRING", "random string")
-APP_NAME = "Suggestions Crawler"
+APP_NAME = "ships service"
 FLASK_HOST = os.getenv("FLASK_HOST", 'localhost')
 FLASK_PORT = os.getenv("FLSAK_PORT", 5000)
 
